@@ -1,0 +1,69 @@
+Master - slave replication 
+- 1 master and 2 slaves
+- read & writes to master whilst reads to the masters
+- ideal for db’s with many queries to read than writes to the table
+
+
+DB1
+
+db1 - sudo apt-get update && sudo apt-get install mysql-server
+sudo vim etc/mysql/my.cnf
+change server address to ip
+unique server id to 1 (uncomment)  (needs to be a unique value and a positive integer) 
+log_bin (uncomment to enable binary logging) 
+:wq!
+sudo service mysql restart
+
+
+mysql -uroot
+create user ‘scott’@‘%’ identified by ‘slavepassword’;
+grant replication slave on *.* to ‘scott’@‘%’;
+
+create database employees;
+create tables employees.fellows (name varchar(10));
+insert into employees.fellows values (‘scott’);
+select * from employees.fellows
+
+exit
+
+- data snapshot using mysql dump
+mysqldump -uroot —all-databases —master-data > masterdump.sql 
+(—master-data will cause mysqldumpt to write binary log info too in the dump) it saves time since without you must put master db in readonly mode, perform the dump and note binary log position by using the show master status command
+
+grep CHANGE *sql | head -1
+- get binary log file and binary log file position recording 
+
+scp masterdump.sql 10.11.12.102:
+
+
+Over to DB 2 
+db2 - sudo apt-get update && sudo apt-get install mysql-server
+sudo vim etc/mysql/my.cnf
+change server address to ip
+unique server id to 1 (uncomment)  (needs to be a unique value and a positive integer) 
+:wq!
+sudo service mysql restart
+
+mysql -uroot
+CHANGE MASTER TO
+MASTER_HOST=’10.11.12.101’,
+MASTER_USER=‘s
+MASTER_PASSWORD=‘slavepassword’;
+
+exit
+
+mysql -uroot < masterdump.sql  (it’s set master log file name and master logfile position)
+
+ mysql -uroot
+start slave;
+show slave status/G;    /g terminator to obtain a more readable vertical layout;
+
+DB1
+
+mysql -uroot
+insert into employees.fellows values (‘jackson’);
+select * from employees.fellows
+
+Over to DB 2 
+select * from employees.fellows
+

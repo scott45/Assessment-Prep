@@ -1,0 +1,162 @@
+proper use of environments
+- dockerizing for local dev purposes. helps in quickly setting up. 
+- CI env to cater for testing and platforms for staging, QA and prod. 
+
+2 tier arch
+- client / server independent resources and separated process.
+- presentation layer / interface run on a client and data layer on server. 
+
+3 tier arch
+- client
+- application server / middleware to provide requested resources by calling on another server.
+- server
+# services delivered at top capacity
+# separation of concern ( indepedent upgrades, easy to debug)
+# scalable, (easy to add resources per tier)
+# managed easily, (without affecting other tiers)
+# flexibility.
+
+N-tier 
+- middle tier is split up into new tiers. (makes LB possible)
+
+
+Auto scaling pattern;
+ciritcal devops role but better if it's handled on software design e.g principles. (horizontal scaling e.g more machines when under load and scaling down when load subsides.)
+(auto scaling ) - optimisez resources and minimisez human effort
+cost optimization with less manual effort on routine scaling tasks.
+it's also dynamic.
+recognisez need from cloud service and scales reactively to meet need.
+
+Horizontal - adding more instances or machines to already existing machines (vms)
+Vertical - adding more resources to already provisioned machine (cpu, ram)
+
+Cloud design patterns
+- auto scaling
+- multi-server
+- db replication
+- server swapping
+- floating-ip 
+- snapshot
+
+Load balancing;
+- distributing workloads and computing resources in a cloud computing environment so that;
+- proxying requests across multiple servers that are running in the cloud environment 
+# high performance levels. (lb infront of scalable instances)
+# high availability.
+# reliability (lb can direct traffic to other resources in other hubs incase of outages)
+# ease of scaling the application up and down to match the demand. 
+
+ Redundancy;
+ - redundancy plan / mission-critical involves using cloud services from multiple providers in various locations to keep enterpises 
+ running incase of an outage in one cloud provider.
+ - disaster recovery
+ - tackle outages
+ - testing for failovers
+ - data redundancy
+
+ High availability
+ - preparing for failures 
+ - fault tolerate
+ - multiple servers
+ - disaster recovery
+ 
+ # server failures
+ - auto scaling
+ - data integrity / replication
+ - dns and statis ips for right context
+
+ # zone failures
+ - zones 
+ - locations
+
+ # cloud failures
+ - redundancy
+
+ # automation and testing
+ - backups and processes and monitoring.
+
+ backups
+ - incremental / snapshots - crons
+ - zipped to optimize memory,  
+ - confifentiality-integrity-availability
+ - automated tests
+
+ Server optimization
+ monitoring / alerting / logging.. checking logs
+ background tasks e.g crons for optimising performance 
+ horizontal scaling, db clustering, indexing etc
+ # capacity
+ - memory
+ - cpu
+ # software design and arch
+ - multi tier for optimised performance
+ #
+ tools - pagerduty librato nagios collectd
+ # gap analysis
+ # alternative solutions
+
+ Operational resources
+ - auditing cloud resources / cloud resources consolidation
+ - underutilised servers by merging processing workload with other servers
+ - virtualization (layers within a single server for multiserver pattern)
+
+ data integrity
+ - security testing tools
+ - securing databases and data
+
+ security scanner
+ intursion detection
+ data encryption
+
+OOP
+SOLID;
+- single-resp - class should do a single job (methods under the same entity)
+- open-closed - extendability without modification. (class entity should be built on without changing it) e.g thru inheritance, abstraction but not changing code to in parent to cater for new functionality.
+- liskov-substitution - derived / subclass must be substituted for their base/parent class. e.g abstruction
+- interface-segregation - client shouldn't be forced to implement an interface it doesn't use or depend on methods they don't use
+- dependenacy-inversion - entities / modules are to depend on abstrations. (high level - low level)
+e.g deployment alert single class for message with different methods for means as derived classes.
+
+Data structures;
+- hash tables for sorting data into them that had been crawled from the web. 
+- graph data structures work well with page rank algorithms . ranking a node / vertice with score dpending on other web resource conections from other nodes.
+
+Descrete math;
+did descrete math / uni and I can articulate areas where it is better utilised e.g logic, probability, set theory. It's something I feel I feel I will rarely encounter unless the feature really needs it. 
+structures that are fundamnetally descrete.
+
+API;
+application programming interface (Exposing my app functionality to other apps without a gui). implementations include the popular REST 
+to expose my app's resources with HTTP verbs and perform crud operations
+
+DATABASES;
+sql/relational and nosql/document. 
+mostly worked with sql postgres and mysql. reasons were because data might require regular analysis, referential integrity,
+and accurate querrying. 
+nosql store data without structured mechanism to link it. e.g working with huge data that querrying it would be inefficeint. e.g mongo
+
+optimising databases
+it involves maximising the speed and efficiency with which data is retrieved. 
+- indexing (creating index statements)
+Optimising performance of DB reads without searching every row of a database table when a query is called.
+- clustering
+replicating servers for optimization and HA 
+- Database Normalization ( basically the organisation of a database into tables and columns) i.e making a table to be about a specific topic and only columns about the table. 
+minimize duplicate data.
+avoid data modification issues.
+simplify queries
+
+
+Security;
+work on accountability e.g giving least privelage and grant access when needed. automating security updates / patches on cron. 
+also reasearching about best security practices can keep you in check. 
+
+vagrant vs docker
+V - managing virtual envs (though it's resource incentive, long time to set up and provision scripts)
+it sets up an environment to run the app. I run the code in that env
+D - dockerfile of minimal lines of code with app and most dependenacies 
+creat images and manamge containers that run my project code
+- resource isolation
+- skill (vagrant)
+- collaboration
+- motive (prod or dev) 

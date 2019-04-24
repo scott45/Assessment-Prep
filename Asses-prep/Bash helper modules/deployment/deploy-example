@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+# The setup below is a sample of how this K8s deploy scripts can be used. Modification may be required to fit your specific purpose.
+set -eo pipefail
+
+DEPLOY_SCRIPT_PATH="${HOME}/deploy"
+
+curl -o $DEPLOY_SCRIPT_PATH https://raw.githubusercontent.com/AndelaOSP/bash-helper-modules/master/k8s/deploy
+
+source $DEPLOY_SCRIPT_PATH
+# add the following environment variables to your ci. Change them according to your cluster requirements
+# PRODUCTION_GOOGLE_COMPUTE_ZONE
+# STAGING_GOOGLE_COMPUTE_ZONE
+# STAGING_CLUSTER_NAME
+# PRODUCTION_CLUSTER_NAME
+# PROJECT_NAME
+# GOOGLE_PROJECT_ID
+# GCLOUD_SERVICE_KEY
+# DOCKER_REGISTRY
+# CHANNEL
+# SLACK_HOOK
+
+
+GCLOUD_SERVICE_KEY_NAME=gcloud-service-key.json
+ALLOWED_DEPLOY_ENVIRONMENTS=('staging', 'production')
+
+require 'PRODUCTION_GOOGLE_COMPUTE_ZONE' $PRODUCTION_GOOGLE_COMPUTE_ZONE
+require 'STAGING_GOOGLE_COMPUTE_ZONE' $STAGING_GOOGLE_COMPUTE_ZONE
+require 'STAGING_CLUSTER_NAME' $STAGING_CLUSTER_NAME
+require 'PRODUCTION_CLUSTER_NAME' $PRODUCTION_CLUSTER_NAME
+require 'PROJECT_NAME' $PROJECT_NAME
+require 'GOOGLE_PROJECT_ID' $GOOGLE_PROJECT_ID
+require 'DOCKER_REGISTRY' $DOCKER_REGISTRY
+require 'GCLOUD_SERVICE_KEY' $GCLOUD_SERVICE_KEY
+
+ # slackhook and channel have to be set as env variables
+ 
+require 'CHANNEL' $CHANNEL
+require 'SLACK_HOOK' $SLACK_HOOK
+
+BRANCH_NAME=$CIRCLE_BRANCH
+setEnvironment $BRANCH_NAME
+isAllowedDeployEnvironment $ENVIRONMENT
+
+getDeploymentName DEPLOYMENT_NAME
+IMAGE_TAG=$(getImageTag $(getCommitHash))
+IMAGE_NAME=$(getImageName)
+
+main() {
+    installGoogleCloudSdk
+    authWithServiceAccount
+    configureGoogleCloudSdk
+    loginToContainerRegistry _json_key
+    buildAndTagDockerImage -f docker/Dockerfile .
+    publishDockerImage
+    logoutContainerRegistry $DOCKER_REGISTRY
+    deployToKubernetesCluster backend
+    configureSlackNotifications
+}
+
+main
+
+

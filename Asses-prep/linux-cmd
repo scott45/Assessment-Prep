@@ -1,0 +1,22 @@
+Mostly used commands / important
+- monitoring
+lsb_release -a
+vmstat
+vmstat -S M
+vmstat -a
+uptime
+who 
+top
+netstat -alt
+netstat -alu
+
+- admin
+mkdir cd touch ls cd .. ls -a
+mv cp vim rm 
+> >> 
+ps ps aux | grep process
+df -h
+cat less man
+sort sort -lsb_release
+find grep 
+!cat !grep

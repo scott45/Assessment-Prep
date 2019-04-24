@@ -1,0 +1,15 @@
+chmod u+x script.sh
+sudo ./backup.sh
+sudo crontab -e
+sudo crontab -l
+
+***** path/to/script.sh
+min | hour | day of month | month of year | day of week
+
+***** every min
+*17**sun every sun at 5
+*/10**** every 10 mins
+**/4*** every 4 hours
+***jan,june,sept*selected months
+@monthly 
+@daily
