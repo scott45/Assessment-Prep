@@ -1,3 +1,3 @@
 # Assessment-Prep
 
-Folder containing my D3 assessment prep materials
+Folder containing my D3 assessment prep work
